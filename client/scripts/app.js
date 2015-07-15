@@ -14,7 +14,7 @@ var app = {
 	$('#send').on('click', function(){
 		
 		var obj = {
-			username: String(window.location.search.slice(10)+":"),
+			username: String(window.location.search.slice(10)),
 			text: $('#message').val(),
 			roomname: $('#roomoptions').className
 		};
@@ -61,7 +61,7 @@ send : function(message){
 		// when obtaining the data, run each to process each data point.
 		_.each(data.results, function(value){
 			//if (value.roomname ===  )
-			if (value.username === undefined || value.username === ""){ value.username = 'anonymous'; }
+			if (value.username === undefined || value.username === "" || value.username === null){ value.username = 'anonymous'; }
 			value.text = (app.checkUp(value.text)) ? "Don't even try to hack us" : value.text
 			value.username = (app.checkUp(value.username)) ? "Badguy" : value.username;
 					//add each cleaned piece of data to the chat client.
@@ -106,9 +106,10 @@ send : function(message){
 	addFriend : function(string){
 
 		app.myFriendList[this.className] = true;
-	
-	 "$('."+ this.className+"')".style.color = "red"; 
-
+		var tryIt = "$('."+ this.className+"')"; 
+		var evalTryIt = eval(tryIt).css("color","red");
+		//tryIt.style.color = "red"; 
+		console.log(evalTryIt);
 		// .style.color = "red";
 		// console.log(app.myFriendList);
 	},
@@ -121,7 +122,7 @@ send : function(message){
 	})
 	},
 	checkUp : function(text) {
-		if (text === undefined) { return false; }
+		if (text === undefined || text === null) { return false; }
 		return text.match(/[-[\]{}\$()*+;,\\^$|#\s]/g, "\\$&");
 	}
 };
